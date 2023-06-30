@@ -1,11 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To Do List</title>
-  </head>
-  <body>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="box" id="heading">
+        <h1>
+            <%= kindOfDay%>
+        </h1>
+    </div>
+    <div class="box">
+        <h3>To Do List</h3>
+        <%for (let i=0;i<list.length;i++){%>
+            <div class="item">
+                <input type="checkbox">
+                <!-- for loop the list array -->
+
+                <p>
+                    <%= list[i] %>
+                </p>
+            </div>
+        <%}%>
+        <form action="/" method="post">
+            <input type="text" name="newItem" placeholder="New Item" autocomplete="off"/>
+            <button type="submit">+</button>
+        </form>
+
+    </div>
     <!-- EJS engine將app.js 運算的變數傳到ejs檔案中使用 -->
     <!-- 使用 <%= %> 來call-->
     <!-- 在html tag外的每一行添加<% %> 可執行control flow JS code -->
@@ -16,16 +42,12 @@
     <h1 style="color: blue"><%= kindOfDay%>To Do List:</h1>
     <% } %> -->
 
-    <h1><%= kindOfDay%></h1>
-    <form action="/" method="post">
-      <input type="text" name="newItem" />
-      <button type="submit">Add</button>
-    </form>
-    <h3>To Do List</h3>
-    <ul>
-      <%for (let i=0;i<list.length;i++){%>
-      <li><%= list[i] %></li>
-      <%}%>
-    </ul>
-  </body>
+
+
+
+
+
+
+</body>
+
 </html>

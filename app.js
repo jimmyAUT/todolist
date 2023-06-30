@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 
-var items = [];
-//設定global variable使其在不同rout中可以使用
+let items = [];
+//設定global letiable使其在不同rout中可以使用
 
 app.set("view engine", "ejs");
 // 在views找要render的檔案,ex:index.ejs
@@ -10,17 +10,21 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 // 新版node可使用express框架接收post資料
 
+app.use(express.static("public"));
+//express框架只會執行app.js及views裡的檔案
+//因此要將其他的檔案如css, images等放入public中,並use才可
+
 app.get("/", function (req, res) {
-  var today = new Date();
-  var options = {
+  let today = new Date();
+  let options = {
     weekday: "long",
     day: "numeric",
     month: "long",
   };
-  var day = today.toLocaleDateString("en-US", options);
+  let day = today.toLocaleDateString("en-US", options);
 
-  //   var current = today.getDay();
-  //   var day = "";
+  //   let current = today.getDay();
+  //   let day = "";
 
   //   switch (current) {
   //     case 0:
@@ -55,7 +59,7 @@ app.get("/", function (req, res) {
 });
 
 app.post("/", function (req, res) {
-  var item = req.body.newItem;
+  let item = req.body.newItem;
   items.push(item);
   console.log(item);
   res.redirect("/");
