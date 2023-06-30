@@ -1,46 +1,65 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-
 const app = express();
+
+var items = [];
+//設定global variable使其在不同rout中可以使用
 
 app.set("view engine", "ejs");
 // 在views找要render的檔案,ex:index.ejs
 
+app.use(express.urlencoded({ extended: true }));
+// 新版node可使用express框架接收post資料
+
 app.get("/", function (req, res) {
   var today = new Date();
-  var current = today.getDay();
-  var day = "";
+  var options = {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  };
+  var day = today.toLocaleDateString("en-US", options);
 
-  switch (current) {
-    case 0:
-      day = "Sunday";
-      break;
-    case 1:
-      day = "Monday";
-      break;
-    case 2:
-      day = "Tuesday";
-      break;
-    case 3:
-      day = "Wednesday";
-      break;
-    case 4:
-      day = "Thursday";
-      break;
-    case 5:
-      day = "Friday";
-      break;
-    case 6:
-      day = "Satday";
-      break;
-    default:
-      console.log("error: " + current);
-  }
+  //   var current = today.getDay();
+  //   var day = "";
 
-  res.render("list", { kindOfDay: day });
+  //   switch (current) {
+  //     case 0:
+  //       day = "Sunday";
+  //       break;
+  //     case 1:
+  //       day = "Monday";
+  //       break;
+  //     case 2:
+  //       day = "Tuesday";
+  //       break;
+  //     case 3:
+  //       day = "Wednesday";
+  //       break;
+  //     case 4:
+  //       day = "Thursday";
+  //       break;
+  //     case 5:
+  //       day = "Friday";
+  //       break;
+  //     case 6:
+  //       day = "Satday";
+  //       break;
+  //     default:
+  //       console.log("error: " + current);
+  //   }
+
+  res.render("list", { kindOfDay: day, list: items });
   // 到views folder找list這個檔案, 並傳JS object到該檔案中
   // object 的key為在list.ejs所設定的變數名
   res.send();
+});
+
+app.post("/", function (req, res) {
+  var item = req.body.newItem;
+  items.push(item);
+  console.log(item);
+  res.redirect("/");
+  //刷新頁面將newItem傳到web page
 });
 
 app.listen(3000, function () {
