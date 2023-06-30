@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
 
+const date = require(__dirname + "/function.js");
+// import the other js files as module objects
+
+console.log(date);
+
 let items = [];
 let works = [];
 //設定global letiable使其在不同rout中可以使用
@@ -16,42 +21,8 @@ app.use(express.static("public"));
 //因此要將其他的檔案如css, images等放入public中,並use才可
 
 app.get("/", function (req, res) {
-  let today = new Date();
-  let options = {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  };
-  let day = today.toLocaleDateString("en-US", options);
-
-  //   let current = today.getDay();
-  //   let day = "";
-
-  //   switch (current) {
-  //     case 0:
-  //       day = "Sunday";
-  //       break;
-  //     case 1:
-  //       day = "Monday";
-  //       break;
-  //     case 2:
-  //       day = "Tuesday";
-  //       break;
-  //     case 3:
-  //       day = "Wednesday";
-  //       break;
-  //     case 4:
-  //       day = "Thursday";
-  //       break;
-  //     case 5:
-  //       day = "Friday";
-  //       break;
-  //     case 6:
-  //       day = "Satday";
-  //       break;
-  //     default:
-  //       console.log("error: " + current);
-  //   }
+  // 使用import的module object中的method
+  let day = date.nowDate();
 
   res.render("list", { listType: day, list: items });
   // 到views folder找list這個檔案, 並傳JS object到該檔案中
