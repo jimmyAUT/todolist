@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 let items = [];
+let works = [];
 //設定global letiable使其在不同rout中可以使用
 
 app.set("view engine", "ejs");
@@ -52,18 +53,34 @@ app.get("/", function (req, res) {
   //       console.log("error: " + current);
   //   }
 
-  res.render("list", { kindOfDay: day, list: items });
+  res.render("list", { listType: day, list: items });
   // 到views folder找list這個檔案, 並傳JS object到該檔案中
   // object 的key為在list.ejs所設定的變數名
-  res.send();
 });
 
 app.post("/", function (req, res) {
   let item = req.body.newItem;
-  items.push(item);
-  console.log(item);
-  res.redirect("/");
-  //刷新頁面將newItem傳到web page
+  console.log(req.body);
+  if (req.body.list === "Works") {
+    works.push(item);
+    res.redirect("/works");
+  } else {
+    items.push(item);
+    console.log(item);
+    res.redirect("/");
+    //刷新頁面將newItem傳到web page
+  }
+});
+
+//set up the second rout "works"
+app.get("/works", function (req, res) {
+  res.render("list", { listType: "Works", list: works });
+});
+
+app.post("/works", function (req, res) {
+  let item = req.body.newItem;
+  works.push(item);
+  res.redirect("/works");
 });
 
 app.listen(3000, function () {

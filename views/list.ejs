@@ -11,7 +11,7 @@
 <body>
     <div class="box" id="heading">
         <h1>
-            <%= kindOfDay%>
+            <%= listType%>
         </h1>
     </div>
     <div class="box">
@@ -28,19 +28,16 @@
         <%}%>
         <form action="/" method="post">
             <input type="text" name="newItem" placeholder="New Item" autocomplete="off"/>
-            <button type="submit">+</button>
+            <button type="submit" name="list" value="<%=listType%>">+</button>
         </form>
+        <!-- 因為form action指向"/" rout,為了使在/works sumbit 後能導向/works這個rout,在button 加上 value,使submit將該值傳回server -->
 
     </div>
-    <!-- EJS engine將app.js 運算的變數傳到ejs檔案中使用 -->
-    <!-- 使用 <%= %> 來call-->
-    <!-- 在html tag外的每一行添加<% %> 可執行control flow JS code -->
-    <!-- 盡量使code的邏輯在server執行而非頁面上 -->
-    <!-- <% if (kindOfDay === "Friday"){ %>
-    <h1 style="color: purple"><%= kindOfDay%>To Do List:</h1>
-    <% } else{ %>
-    <h1 style="color: blue"><%= kindOfDay%>To Do List:</h1>
-    <% } %> -->
+    
+    <!-- EJS engine將app.js 運算的變數傳到ejs檔案中使用
+    使用 <%= %> 來call
+     在html tag外的每一行添加<% %> 可執行control flow JS code 
+     盡量使code的邏輯在server執行而非頁面上 -->
 
 
 
