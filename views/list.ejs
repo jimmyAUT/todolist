@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do List</title>
+  </head>
+  <body>
+    <!-- EJS engine將app.js 運算的變數傳到ejs檔案中使用 -->
+    <!-- 使用 <%= %> 來call-->
+    <!-- 在html tag外的每一行添加<% %> 可執行control flow JS code -->
+    <!-- 盡量使code的邏輯在server執行而非頁面上 -->
+
+    <% if (kindOfDay === "Friday"){ %>
+    <h1 style="color: purple"><%= kindOfDay%>To Do List:</h1>
+    <% } else{ %>
+    <h1 style="color: blue"><%= kindOfDay%>To Do List:</h1>
+    <% } %>
+  </body>
+</html>
