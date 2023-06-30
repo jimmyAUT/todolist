@@ -83,6 +83,10 @@ app.post("/works", function (req, res) {
   res.redirect("/works");
 });
 
+app.get("/about", function (req, res) {
+  res.render("about");
+});
+
 app.listen(3000, function () {
   console.log("Server runs on port 3000");
 });
