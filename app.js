@@ -60,10 +60,17 @@ app.use(express.static("public"));
 //因此要將其他的檔案如css, images等放入public中,並use才可
 
 app.get("/", function (req, res) {
+  //使用model.find() access data in the DB
+  Item.find({})
+    .then((items) => {
+      res.render("list", { listType: "Today", list: items });
+    })
+    .catch((err) => {
+      console.log("error : " + err);
+    });
   // 使用import的module object中的method
   // let day = date.nowDate();
 
-  res.render("list", { listType: "Today", list: items });
   // 到views folder找list這個檔案, 並傳JS object到該檔案中
   // object 的key為在list.ejs所設定的變數名
 });

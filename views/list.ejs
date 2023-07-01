@@ -1,6 +1,6 @@
 <%- include("header") -%>
-    
-    
+
+
     <div class="box" id="heading">
         <h1>
             <%= listType%>
@@ -14,26 +14,22 @@
                 <!-- for loop the list array -->
 
                 <p>
-                    <%= list[i] %>
+                    <%= list[i].name %>
                 </p>
             </div>
-        <%}%>
-        <form action="/" method="post">
-            <input type="text" name="newItem" placeholder="New Item" autocomplete="off"/>
-            <button type="submit" name="list" value="<%=listType%>">+</button>
-        </form>
-        <!-- 因為form action指向"/" rout,為了使在/works sumbit 後能導向/works這個rout,在button 加上 value,使submit將該值傳回server -->
+            <%}%>
+                <form action="/" method="post">
+                    <input type="text" name="newItem" placeholder="New Item" autocomplete="off" />
+                    <button type="submit" name="list" value="<%=listType%>">+</button>
+                </form>
+                <!-- 因為form action指向"/" rout,為了使在/works sumbit 後能導向/works這個rout,在button 加上 value,使submit將該值傳回server -->
 
     </div>
-    
+
     <!-- EJS engine將app.js 運算的變數傳到ejs檔案中使用
     使用 <%= %> 來call
      在html tag外的每一行添加<% %> 可執行control flow JS code 
      盡量使code的邏輯在server執行而非頁面上 -->
 
 
-     <%- include("footer") -%>
-
-
-
-
+    <%- include("footer") -%>
