@@ -91,16 +91,25 @@ app.get("/", function (req, res) {
 app.post("/", function (req, res) {
   let item = req.body.newItem;
   console.log(req.body);
-  if (req.body.list === "Works") {
-    works.push(item);
-    res.redirect("/works");
-  } else {
-    let newItem = new Item({ name: item });
+  let newItem = new Item({ name: item });
 
+  let routeName = req.body.listType;
+
+  if (routeName === "Today") {
     //將單筆資料存入DB
     newItem.save();
     res.redirect("/");
     //刷新頁面將newItem傳到web page
+  } else {
+    Route.findOne({ routeName: routeName })
+      .then((routeList) => {
+        routeList.items.push(newItem);
+        routeList.save();
+        res.redirect("/" + routeName);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 });
 

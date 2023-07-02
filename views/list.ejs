@@ -22,7 +22,7 @@
             <%}%>
                 <form action="/" method="post">
                     <input type="text" name="newItem" placeholder="New Item" autocomplete="off" />
-                    <button type="submit" name="list" value="<%=listType%>">+</button>
+                    <button type="submit" name="listType" value="<%=listType%>">+</button>
                 </form>
                 <!-- 因為form action指向"/" rout,為了使在/works sumbit 後能導向/works這個rout,在button 加上 value,使submit將該值傳回server -->
 
