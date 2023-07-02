@@ -40,14 +40,14 @@ const item3 = new Item({
 //建立array來裝新objects
 const defaultItems = [item1, item2, item3];
 
-//使用insertMany()將array存到資料庫中
-// Item.insertMany(defaultItems)
-//   .then(function () {
-//     console.log("Upload default item to DB successfully");
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
+//建立存在DB上的route list,先宣告存儲的物件格式,在使用model宣告建立該物件的constructor
+//每一個route都存有各自的items, items存儲格式使用先前建立的itemSchema
+const newRouteSchema = new mongoose.Schema({
+  routeName: String,
+  items: [itemSchema],
+});
+
+const Route = mongoose.model("Route", newRouteSchema);
 
 app.set("view engine", "ejs");
 // 在views找要render的檔案,ex:index.ejs
@@ -63,7 +63,20 @@ app.get("/", function (req, res) {
   //使用model.find() access data in the DB
   Item.find({})
     .then((items) => {
-      res.render("list", { listType: "Today", list: items });
+      if (items.length === 0) {
+        //check are the defaultiems already exist in the DB
+        //否則使用insertMany()將array存到資料庫中,並重新返回頁面
+        Item.insertMany(defaultItems)
+          .then(function () {
+            console.log("Upload default item to DB successfully");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        res.redirect("/");
+      } else {
+        res.render("list", { listType: "Today", list: items });
+      }
     })
     .catch((err) => {
       console.log("error : " + err);
@@ -82,16 +95,52 @@ app.post("/", function (req, res) {
     works.push(item);
     res.redirect("/works");
   } else {
-    items.push(item);
-    console.log(item);
+    let newItem = new Item({ name: item });
+
+    //將單筆資料存入DB
+    newItem.save();
     res.redirect("/");
     //刷新頁面將newItem傳到web page
   }
 });
 
+app.post("/delete", (req, res) => {
+  let removeId = req.body.checkbox;
+  console.log(removeId);
+  //modelname.findByIdAndRemove()
+  Item.findByIdAndRemove(removeId)
+    .then(() => {
+      console.log(removeId + " item has been removed");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  res.redirect("/");
+});
+
 //set up the second rout "works"
-app.get("/works", function (req, res) {
-  res.render("list", { listType: "Works", list: works });
+// app.get("/works", function (req, res) {
+//   res.render("list", { listType: "Works", list: works });
+// });
+// use the url iuput parameters to create a new route
+app.get("/:newRoute", function (req, res) {
+  let newRoute = req.params.newRoute;
+  Route.find({ routeName: newRoute })
+    .then((result) => {
+      if (result.length > 0) {
+        res.render("list", { listType: newRoute, list: result[0].items });
+      } else {
+        let routeList = new Route({
+          routeName: newRoute,
+          items: defaultItems,
+        });
+        routeList.save();
+        res.redirect("/" + newRoute);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 app.post("/works", function (req, res) {
