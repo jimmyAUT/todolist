@@ -17,6 +17,9 @@
                         <%= list[i].name %>
                     </p>
                 </div>
+
+                <!-- 使用 hidden 的input tag, 將該頁面的routename 回傳, 需要 </input> 來close-->
+                <input type="hidden" name="listType" value="<%=listType%>"></input>
             </form>
 
             <%}%>

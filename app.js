@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const _ = require("lodash");
 
 //使用mongoose
 const mongoose = require("mongoose");
@@ -116,15 +117,45 @@ app.post("/", function (req, res) {
 app.post("/delete", (req, res) => {
   let removeId = req.body.checkbox;
   console.log(removeId);
-  //modelname.findByIdAndRemove()
-  Item.findByIdAndRemove(removeId)
-    .then(() => {
-      console.log(removeId + " item has been removed");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  res.redirect("/");
+  let route = req.body.listType;
+  if (route === "Today") {
+    //刪除DB的資料modelname.findByIdAndRemove()
+    Item.findByIdAndRemove(removeId)
+      .then(() => {
+        console.log(removeId + " item has been removed");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    res.redirect("/");
+  } else {
+    // findOneAndUpdate({conditions},{update}).then().catch() =>
+    // findOneAndUpdate({conditions},{$pull:{field:{query}}}).then().catch() =>
+    // conditions 是搜尋Route DB中的物件,這裡是以routeName 屬性來搜尋特定物件
+    // $pull是mongodb的刪除特定資料方法,用以搜尋物件中的array屬性，以特定的key來搜尋,這裡的items建立時即帶有特定id,並搭配key _id
+    Route.updateOne(
+      { routeName: route },
+      { $pull: { items: { _id: removeId } } }
+    )
+      .then(() => {
+        console.log("delete item");
+        res.redirect("/" + route);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // Route.findOneAndUpdate(
+    //   { routeName: route },
+    //   { $pull: { items: { _id: removeId } } }
+    // )
+    //   .then(() => {
+    //     console.log("delete item");
+    //     res.redirect("/" + route);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  }
 });
 
 //set up the second rout "works"
@@ -133,7 +164,7 @@ app.post("/delete", (req, res) => {
 // });
 // use the url iuput parameters to create a new route
 app.get("/:newRoute", function (req, res) {
-  let newRoute = req.params.newRoute;
+  let newRoute = _.capitalize(req.params.newRoute);
   Route.find({ routeName: newRoute })
     .then((result) => {
       if (result.length > 0) {
@@ -150,12 +181,6 @@ app.get("/:newRoute", function (req, res) {
     .catch((err) => {
       console.log(err);
     });
-});
-
-app.post("/works", function (req, res) {
-  let item = req.body.newItem;
-  works.push(item);
-  res.redirect("/works");
 });
 
 app.get("/about", function (req, res) {
