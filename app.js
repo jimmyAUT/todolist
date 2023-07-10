@@ -14,7 +14,10 @@ const date = require(__dirname + "/function.js");
 //設定global letiable使其在不同rout中可以使用
 
 // 建立資料庫連線
-mongoose.connect("mongodb://127.0.0.1:27017/todolistDB", {
+const localURL = "mongodb://127.0.0.1:27017";
+const mongodbURL =
+  "mongodb+srv://admin-jimmy:16981047@cluster0.3x3hlap.mongodb.net";
+mongoose.connect(mongodbURL + "/todolistDB", {
   useNewUrlParser: true,
 });
 
